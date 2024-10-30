@@ -191,54 +191,6 @@ from botocore.exceptions import ClientError, NoCredentialsError
 import os
 import boto3
 
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
-def sen_sim_calc(s1 , s2) :
-
-    #Compute embedding for both lists
-    embedding_1= model.encode(s1 , convert_to_tensor=False)
-    embedding_2 = model.encode(s2 , convert_to_tensor=False)
-
-    score = util.pytorch_cos_sim(embedding_1, embedding_2) 
-    return score
-
-def split_into_sentences(paragraph):
-    # Regular expression pattern
-    sentence_endings = r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s'
-    sentences = re.split(sentence_endings, paragraph)    
-    return sentences
-def update_string(new_value):
-    st.session_state.response = new_value
-    st.write(st.session_state.response)
-
-def highlight_similar_sentences(resp, chunk , highlight_color):
-    # print("spliiting text")
-    resp_lines = split_into_sentences(resp)
-    chunk_lines = split_into_sentences(chunk)
-    # print("splitting done")
-    resp_output = ""
-    chunk_output = ""
-    
-    for line1 in resp_lines:
-        for line2 in chunk_lines:
-            # ratio = SequenceMatcher(None, line1, line2).ratio()
-            # print("calculating score")
-            ratio = sen_sim_calc(line1 , line2)
-            # print("score calculation done") 
-            # print("-----------------------------")
-            if ratio >= 0.85:  # Adjust this threshold as needed
-                # code for highlight paragraphs at the same time 
-                resp_output += f"<span style='background-color:{highlight_color};'>{line1}</span><br>"
-                chunk_output += f"<span style='background-color: {highlight_color};'>{line2}</span><br>"
-                #-------------------------------------------------
-                # resp_output += f"{line1} &#9731" 
-                # chunk_output += f"<span style='background-color: {highlight_color};'>{line2}</span><br>"
-        else:
-            resp_output += f"{line1}<br>"
-            chunk_output += f"{line2}<br>"
-    
-    return resp_output , chunk_output
-
 if user_query := st.chat_input("Ask a question about KCS documents:") : 
     # import pdb; pdb.set_trace()
     if user_query :
