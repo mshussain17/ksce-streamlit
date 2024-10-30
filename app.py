@@ -20,7 +20,7 @@ load_dotenv()
 
 
 # Streamlit page configuration
-st.set_page_config(page_title="KCS database query with groq", page_icon="📄")
+st.set_page_config(page_title="KSCE-GPT", page_icon="📄")
 st.title("KSCE-GPT")
 
 import common as common
