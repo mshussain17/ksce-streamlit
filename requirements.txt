@@ -13,3 +13,4 @@ uvicorn
 python-dotenv==1.0.1
 langchain-voyageai==0.1.2
 langchain-core==0.3.13
+boto3
