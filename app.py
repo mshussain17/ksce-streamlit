@@ -192,23 +192,6 @@ import os
 import boto3
 from aws_functions import download_files_from_s3, check_file_exists_in_s3
 from PIL import Image
-import matplotlib.pyplot as plt
-
-def get_image_from_s3(image_path):
-    temp_dir = tempfile.mkdtemp()
-    download_files_from_s3(temp_dir, [image_path])
-    image =  Image.open(os.path.join(temp_dir, image_path))
-    shutil.rmtree(temp_dir)
-    return image
-
-def plot_images(image_paths):
-    images_shown = 0
-    plt.figure(figsize=(16, 9))
-    for img_path in image_paths:
-        print(img_path)
-        # if check_file_exists_in_s3(img_path):
-        image = get_image_from_s3(img_path)
-        st.image(image)
 
 if user_query := st.chat_input("Ask your question") : 
     # import pdb; pdb.set_trace()
