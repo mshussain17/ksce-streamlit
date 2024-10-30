@@ -14,7 +14,6 @@ import boto3
 import tempfile
 import shutil
 import re
-from sentence_transformers import SentenceTransformer, util 
 import time
 
 load_dotenv()  
