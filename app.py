@@ -210,7 +210,7 @@ def plot_images(image_paths):
         image = get_image_from_s3(img_path)
         st.image(image)
 
-if user_query := st.chat_input("Ask a question about KCS documents:") : 
+if user_query := st.chat_input("Ask your question") : 
     # import pdb; pdb.set_trace()
     if user_query :
         st.write(f"QUESTION : {user_query}")
