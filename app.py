@@ -190,6 +190,25 @@ import tempfile
 from botocore.exceptions import ClientError, NoCredentialsError
 import os
 import boto3
+from aws_functions import download_files_from_s3, check_file_exists_in_s3
+from PIL import Image
+import matplotlib.pyplot as plt
+
+def get_image_from_s3(image_path):
+    temp_dir = tempfile.mkdtemp()
+    download_files_from_s3(temp_dir, [image_path])
+    image =  Image.open(os.path.join(temp_dir, image_path))
+    shutil.rmtree(temp_dir)
+    return image
+
+def plot_images(image_paths):
+    images_shown = 0
+    plt.figure(figsize=(16, 9))
+    for img_path in image_paths:
+        print(img_path)
+        # if check_file_exists_in_s3(img_path):
+        image = get_image_from_s3(img_path)
+        st.image(image)
 
 if user_query := st.chat_input("Ask a question about KCS documents:") : 
     # import pdb; pdb.set_trace()
@@ -203,6 +222,7 @@ if user_query := st.chat_input("Ask a question about KCS documents:") :
     placeholder = st.empty()
     response, images, doc, tool_use = ask_ai(user_query)
     doc_url = "https://dgpt-public.s3.eu-north-1.amazonaws.com/ksce-public/" + doc
+    images_urls = ["https://dgpt-public.s3.eu-north-1.amazonaws.com/ksce-public/" + x for x in images]
     st.write(response)
     updated_resp = ""
     if doc != "":
@@ -211,6 +231,11 @@ if user_query := st.chat_input("Ask a question about KCS documents:") :
                 st.header("Generated answer references" , divider = "red")
                 with st.expander(str(doc_url)) : 
                     st.write(doc_url , unsafe_allow_html = True)
+    for image_path in images_urls:
+        try:
+            st.image(image_path, caption='', use_column_width=True)
+        except:
+            pass
     ###################################################################################  
     # time.sleep(1) 
     # placeholder.text_are("Response : " , "Here's a bouquet &mdash;\
